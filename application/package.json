@@ -1,0 +1,34 @@
+{
+  "name": "data-engineer",
+  "version": "1.0.0",
+  "description": "A CLI application to help me explore data engineering concepts (like building a data lake).",
+  "main": "dist/index.js",
+  "scripts": {
+    "compile": "tsc",
+    "lint": "",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Chavez <mark.chavez@startmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/minio": "^7.0.2",
+    "@types/mongodb": "^3.1.28",
+    "@types/mongoose": "^5.5.6",
+    "@types/node": "^12.0.10",
+    "@types/pretty-bytes": "^5.1.0",
+    "eslint": "^6.0.1",
+    "typescript": "^3.5.2",
+    "uglify-js": "^3.6.0"
+  },
+  "dependencies": {
+    "avsc": "^5.4.11",
+    "commander": "^2.20.0",
+    "dotenv": "^8.0.0",
+    "minio": "^7.0.10",
+    "mongodb": "^3.2.7",
+    "mongoose": "^5.6.1",
+    "pretty-bytes": "^5.2.0"
+  }
+}
