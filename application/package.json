@@ -4,9 +4,10 @@
   "description": "A CLI application to help me explore data engineering concepts (like building a data lake).",
   "main": "dist/index.js",
   "scripts": {
-    "compile": "tsc",
-    "lint": "",
-    "start": "node dist/index.js",
+    "compile": "rm -rf dist && tsc",
+    "lint": "eslint src",
+    "minify": "uglifyjs --compress --mangle -o dist/index.min.js dist/index.js",
+    "start": "node dist/index.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mark Chavez <mark.chavez@startmail.com>",
