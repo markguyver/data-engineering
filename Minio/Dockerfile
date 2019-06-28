@@ -1,3 +1,4 @@
 FROM minio/minio
-VOLUME ['/data']
+VOLUME ["/data"]
+EXPOSE 9000
 ENTRYPOINT ["minio", "server", "/data"]
