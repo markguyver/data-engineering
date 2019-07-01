@@ -27,24 +27,27 @@ const minioClient = new minio.Client({
 // Define Functions to Be Used
 const convertDocumentToJsonString = (personObject: IPerson): string => JSON.stringify(personObject);
 const convertDocumentToAvroString = (personObject: IPerson): Buffer => avroType.toBuffer(personObject);
+const convertDocumentToParquetString = (personObject: IPerson) => {};
+const convertDocumentToMessagePackString = (personObject: IPerson) => {};
 const saveDocumentToObjectStore = (documentContent: string | Buffer, bucketName: string, objectPath: string) => minioClient.putObject(bucketName, objectPath, documentContent);
 
-// Perform Script - 1 Record Per File
-// for (let i = 0; i < 100; i++) {
-//     let currentMockPerson = generateFakeRecord();
-//     let currentUuid = generateFakeUuid();
-//     saveDocumentToObjectStore(convertDocumentToJsonString(currentMockPerson), 'json', currentUuid + '.json');
-//     saveDocumentToObjectStore(convertDocumentToAvroString(currentMockPerson), 'avro', currentUuid + '.avro');
-// }
-
-// Perform Script - 1 File for All Records
-let recordBufferObject;
-for (let i = 0; i < 100; i++) {
-    let currentMockPerson = generateFakeRecord();
-    if ('undefined' == typeof recordBufferObject) {
-        let recordBufferObject = convertDocumentToAvroString(currentMockPerson);
-    } else {
-        avroType.encode(currentMockPerson, recordBufferObject);
+const insertIndividualRecordDocuments = (numberOfDocumentsToInsert: number): void => {
+    for (let i = 0; i < numberOfDocumentsToInsert; i++) {
+        let currentMockPerson = generateFakeRecord();
+        let currentUuid = generateFakeUuid();
+        saveDocumentToObjectStore(convertDocumentToJsonString(currentMockPerson), process.env.MINIO_BUCKET_JSON || '', currentUuid + '.json');
+        saveDocumentToObjectStore(convertDocumentToAvroString(currentMockPerson), process.env.MINIO_BUCKET_AVRO || '', currentUuid + '.avro');
     }
 }
-saveDocumentToObjectStore(recordBufferObject || '', 'avro', 'multiple.avro');
+const insertSingleDocumentWithMultipleRecords = (numberOfRecordsInDocument: number, objectName: string = 'multiple'): void => {
+    let recordBufferObject;
+    for (let i = 0; i < numberOfRecordsInDocument; i++) {
+        let currentMockPerson = generateFakeRecord();
+        if ('undefined' == typeof recordBufferObject) {
+            let recordBufferObject = convertDocumentToAvroString(currentMockPerson);
+        } else {
+            avroType.encode(currentMockPerson, recordBufferObject);
+        }
+    }
+    saveDocumentToObjectStore(recordBufferObject || '', process.env.MINIO_BUCKET_AVRO || '', objectName + '.avro');
+};
