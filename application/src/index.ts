@@ -1,6 +1,5 @@
 // Load Dependencies
 import avsc from "avsc";
-import BufferList from "bl";
 import dotenv from "dotenv";
 import minio from "minio";
 import msgpack5 from "msgpack5";
@@ -45,8 +44,8 @@ const parquetSchema = new parquet.ParquetSchema({
 const convertDocumentToJsonString = (personObject: IPerson): string => JSON.stringify(personObject);
 const convertDocumentToAvroString = (personObject: IPerson): Buffer => avroType.toBuffer(personObject);
 const convertDocumentToParquetString = (personObject: IPerson) => '';
-const convertDocumentToMessagePackString = (personObject: IPerson): BufferList => messagePack.encode(personObject);
-const saveDocumentToObjectStore = (documentContent: string | Buffer | BufferList, bucketName: string, objectPath: string) => minioClient.putObject(bucketName, objectPath, documentContent);
+const convertDocumentToMessagePackString = (personObject: IPerson): string => messagePack.encode(personObject).toString('hex');
+const saveDocumentToObjectStore = (documentContent: string | Buffer, bucketName: string, objectPath: string) => minioClient.putObject(bucketName, objectPath, documentContent);
 
 // Define Exported Functions
 export const insertIndividualRecordDocuments = (numberOfDocumentsToInsert: number): void => {
@@ -55,7 +54,7 @@ export const insertIndividualRecordDocuments = (numberOfDocumentsToInsert: numbe
         let currentUuid = generateFakeUuid();
         saveDocumentToObjectStore(convertDocumentToAvroString(currentMockPerson), minioBucketAvro, currentUuid + '.avro');
         saveDocumentToObjectStore(convertDocumentToJsonString(currentMockPerson), minioBucketJson, currentUuid + '.json');
-        // saveDocumentToObjectStore(convertDocumentToMessagePackString(currentMockPerson), minioBucketMessagePack, currentUuid + '.messagepack');
+        saveDocumentToObjectStore(convertDocumentToMessagePackString(currentMockPerson), minioBucketMessagePack, currentUuid + '.messagepack');
         // saveDocumentToObjectStore(convertDocumentToParquetString(currentMockPerson), minioBucketParquet, currentUuid + '.parquet');
     }
 }
