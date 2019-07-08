@@ -1,7 +1,7 @@
 // Load Dependencies
 import avsc from "avsc";
 import dotenv from "dotenv";
-import minio from "minio";
+import {Client as MinioClient} from "minio";
 import msgpack5 from "msgpack5";
 import parquet from "parquetjs";
 import {IPerson} from "./DataTypes";
@@ -27,7 +27,7 @@ const avroType = avsc.Type.forSchema({
     ]
 });
 const messagePack = msgpack5();
-const minioClient = new minio.Client({
+const minioConnection = new MinioClient({
     endPoint: process.env.MINIO_HOST || '',
     port: 9000,
     useSSL: false,
@@ -45,7 +45,7 @@ const convertDocumentToJsonString = (personObject: IPerson): string => JSON.stri
 const convertDocumentToAvroString = (personObject: IPerson): Buffer => avroType.toBuffer(personObject);
 const convertDocumentToParquetString = (personObject: IPerson) => '';
 const convertDocumentToMessagePackString = (personObject: IPerson): string => messagePack.encode(personObject).toString('hex');
-const saveDocumentToObjectStore = (documentContent: string | Buffer, bucketName: string, objectPath: string) => minioClient.putObject(bucketName, objectPath, documentContent);
+const saveDocumentToObjectStore = (documentContent: string | Buffer, bucketName: string, objectPath: string) => minioConnection.putObject(bucketName, objectPath, documentContent);
 
 // Define Exported Functions
 export const insertIndividualRecordDocuments = (numberOfDocumentsToInsert: number): void => {
