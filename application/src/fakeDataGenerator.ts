@@ -1,7 +1,14 @@
+import avsc from "avsc";
 import faker from "faker";
-import {IPerson} from "./DataTypes";
+import parquet from "parquetjs";
 
-export const generateFakeRecord = (): IPerson => {
+export interface IRecord {
+    firstName: string,
+    lastName: string,
+    dateofBirth: string
+}
+
+export const generateFakeRecord = (): IRecord => {
     return {
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
@@ -18,3 +25,25 @@ export const generateFakeUuid = (): string => {
     });
     return uuid;
 };
+
+// @see https://github.com/mtth/avsc/wiki/Advanced-usage
+const getAvroRecordSchema = (): avsc.Schema => {
+    return {
+        type: 'record',
+        name: 'personObject',
+        fields: [
+            {name: 'firstName', type: 'string'},
+            {name: 'lastName', type: 'string'},
+            {name: 'dateofBirth', type: 'string'}
+        ]
+    };
+};
+
+export const getAvroRecordType = (): avsc.Type => avsc.Type.forSchema(getAvroRecordSchema());
+
+// @see https://github.com/ironSource/parquetjs
+export const getParquetRecordSchema = (): parquet.ParquetSchema => new parquet.ParquetSchema({
+    firstName: { type: 'UTF8' },
+    lastName: { type: 'UTF8' },
+    dateofBirth: { type: 'UTF8' }
+});
