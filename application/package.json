@@ -4,9 +4,8 @@
   "description": "A CLI application to help me explore data engineering concepts (like building a data lake).",
   "main": "dist/index.js",
   "scripts": {
-    "compile": "rm -rf dist && tsc",
+    "compile": "rm -rf dist && tsc && uglifyjs --compress --mangle -o dist/index.min.js dist/*.js",
     "lint": "eslint src",
-    "minify": "uglifyjs --compress --mangle -o dist/index.min.js dist/index.js",
     "start": "node dist/index.min.js"
   },
   "author": "Mark Chavez <mark.chavez@startmail.com>",
@@ -17,15 +16,14 @@
     "@types/faker": "^4.1.5",
     "@types/minio": "^7.0.2",
     "@types/msgpack5": "^3.4.1",
-    "@types/node": "^12.0.10",
+    "@types/node": "^12.6.2",
     "@types/parquetjs": "^0.10.0",
     "eslint": "^6.0.1",
-    "typescript": "^3.5.2",
+    "typescript": "^3.5.3",
     "uglify-js": "^3.6.0"
   },
   "dependencies": {
-    "avsc": "^5.4.11",
-    "commander": "^2.20.0",
+    "avsc": "^5.4.12",
     "dotenv": "^8.0.0",
     "faker": "^4.1.0",
     "minio": "^7.0.10",
