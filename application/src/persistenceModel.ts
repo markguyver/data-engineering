@@ -18,4 +18,4 @@ const saveDocumentToObjectStore = (documentContent: string | Buffer, bucketName:
 export const saveAvroDocumentToObjectStore = (document: Buffer, documentId: string): Promise<string> => saveDocumentToObjectStore(document, minioBucketAvro, documentId + '.avro');
 export const saveJsonDocumentToObjectStore = (document: string, documentId: string): Promise<string> => saveDocumentToObjectStore(document, minioBucketJson, documentId + '.json');
 export const saveMessagePackDocumentToObjectStore = (document: string, documentId: string): Promise<string> => saveDocumentToObjectStore(document, minioBucketMessagePack, documentId + '.messagepack');
-export const saveParquetDocumentToObjectStore = (document, documentId: string): Promise<string> => saveDocumentToObjectStore(document, minioBucketParquet, documentId + '.parquet');
+export const saveParquetDocumentToObjectStore = (document: any, documentId: string): Promise<string> => saveDocumentToObjectStore(document, minioBucketParquet, documentId + '.parquet');
